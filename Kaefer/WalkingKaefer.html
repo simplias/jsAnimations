@@ -3,17 +3,27 @@
 <head>
     <title>Walking Kaefer test</title>
     <script src="http://code.createjs.com/easeljs-0.7.0.min.js"></script>
+    <script type="text/javascript" src="http://code.createjs.com/preloadjs-0.6.0.min.js"></script>
     <script>
-        var stage, holder, imagesToLoad, imagesLoaded, kaefersBody;
-        function init() {
-            imagesLoaded = 0;
-            stage = new createjs.Stage("demoCanvas");
+        var stage, holder, manifest, kaefersBody;
 
-            imagesToLoad = [{
-                name: "body",
+        function showDistractor(id) {
+            var div = id ? document.getElementById(id) : document.querySelector("div canvas").parentNode;
+            div.className += " loading";
+        };
+
+        function hideDistractor() {
+            var div = document.querySelector(".loading");
+            div.className = div.className.replace(/\bloading\b/);
+        };
+
+        function init() {
+		 showDistractor();
+            manifest = [{
+                id: "body",
                 src: "BodySmall.png",
                 directionY: 1,
-                speedY: 10,
+                speedY: 20,
                 counterY: 0,
                 zIndex: 100,
                 moveEvent: function (event, data) {
@@ -21,308 +31,337 @@
                     data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
                     data.counterY += data.speedY * data.directionY;
 
-                    if (data.counterY > 10) {
+                    if (data.counterY > 50) {
                         data.directionY = data.directionY * -1;
-                    } else if (data.counterY < -10) {
+                    } else if (data.counterY < -50) {
                         data.directionY = data.directionY * -1;
                     }
                 }
 
             },
-                           {
-                               name: "glasses",
-                               src: "BrilleSmall.png",
-                               directionY: 1,
-                               offsetY: 0,
-                               offsetX: 77,
-                               speedY: 20,
-                               counterY: 0,
-                               zIndex: 200,
-                               moveEvent: function (event, data) {
+            {
+                id: "glasses",
+                src: "BrilleSmall.png",
+                directionY: 1,
+                offsetY: 0,
+                offsetX: 77,
+                speedY: 20,
+                counterY: 0,
+                zIndex: 200,
+                moveEvent: function (event, data) {
 
-                                   data.image.y += event.delta / 1000 * data.speedY * data.directionY;
-                                   data.counterY += data.speedY * data.directionY;
+                    data.image.y += event.delta / 1000 * data.speedY * data.directionY;
+                    data.counterY += data.speedY * data.directionY;
 
-                                   if (data.counterY > 210) {
-                                       data.directionY = data.directionY * -1;
-                                   } else if (data.counterY < -10) {
-                                       data.directionY = data.directionY * -1;
-                                   }
-                               }
-                           },
-                            {
-                                name: "eyes",
-                                src: "EyesSmall.png",
-                                directionY: 1,
-                                offsetY: 5,
-                                offsetX: 77,
-                                speedY: 10,
-                                counterY: 0,
-                                zIndex: 200,
-                                moveEvent: function (event, data) {
+                    if (data.counterY > 210) {
+                        data.directionY = data.directionY * -1;
+                    } else if (data.counterY < -10) {
+                        data.directionY = data.directionY * -1;
+                    }
+                }
+            },
+             {
+                 id: "eyes",
+                 src: "EyesSmall.png",
+                 directionY: 1,
+                 offsetY: 5,
+                 offsetX: 77,
+                 speedY: 10,
+                 counterY: 0,
+                 zIndex: 200,
+                 moveEvent: function (event, data) {
 
-                                    data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
-                                    data.counterY += data.speedY * data.directionY;
+                     data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
+                     data.counterY += data.speedY * data.directionY;
 
-                                    if (data.counterY > 50) {
-                                        data.directionY = data.directionY * -1;
-                                    } else if (data.counterY < -50) {
-                                        data.directionY = data.directionY * -1;
-                                    }
-                                }
-                            },
-                            {
-                                name: "LegObenSmall",
-                                src: "LegObenSmall.png",
-                                directionY: 1,
-                                offsetY: 40,
-                                offsetX: -100,
-                                speedY: 40,
-                                counterY: 0,
-                                zIndex: 200,
-                                moveEvent: function (event, data) {
+                     if (data.counterY > 50) {
+                         data.directionY = data.directionY * -1;
+                     } else if (data.counterY < -50) {
+                         data.directionY = data.directionY * -1;
+                     }
+                 }
+             },
+             {
+                 id: "LegObenSmall",
+                 src: "LegObenSmall.png",
+                 directionY: 1,
+                 offsetY: 40,
+                 offsetX: -100,
+                 speedY: 40,
+                 counterY: 0,
+                 zIndex: 200,
+                 moveEvent: function (event, data) {
 
-                                    data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
-                                    data.counterY += data.speedY * data.directionY;
+                     data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
+                     data.counterY += data.speedY * data.directionY;
 
-                                    if (data.counterY > 100) {
-                                        data.directionY = data.directionY * -1;
-                                    } else if (data.counterY < -100) {
-                                        data.directionY = data.directionY * -1;
-                                    }
-                                }
-                            },
-                             {
-                                 name: "LegObenSmall",
-                                 src: "LegObenSmall.png",
-                                 directionY: 1,
-                                 offsetY: 40,
-                                 offsetX: -40,
-                                 speedY: 40,
-                                 counterY: 0,
-                                 zIndex: 200,
-                                 moveEvent: function (event, data) {
+                     if (data.counterY > 100) {
+                         data.directionY = data.directionY * -1;
+                     } else if (data.counterY < -100) {
+                         data.directionY = data.directionY * -1;
+                     }
+                 }
+             },
+              {
+                  id: "LegObenSmall",
+                  src: "LegObenSmall.png",
+                  directionY: 1,
+                  offsetY: 40,
+                  offsetX: -40,
+                  speedY: 40,
+                  counterY: 0,
+                  zIndex: 200,
+                  moveEvent: function (event, data) {
 
-                                     data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
-                                     data.counterY += data.speedY * data.directionY;
+                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
+                      data.counterY += data.speedY * data.directionY;
 
-                                     if (data.counterY > 100) {
-                                         data.directionY = data.directionY * -1;
-                                     } else if (data.counterY < -100) {
-                                         data.directionY = data.directionY * -1;
-                                     }
-                                 }
-                             },
-                              {
-                                  name: "LegObenSmall",
-                                  src: "LegObenSmall.png",
-                                  directionY: 1,
-                                  offsetY: 40,
-                                  offsetX: 20,
-                                  speedY: 40,
-                                  counterY: 0,
-                                  zIndex: 200,
-                                  moveEvent: function (event, data) {
+                      if (data.counterY > 100) {
+                          data.directionY = data.directionY * -1;
+                      } else if (data.counterY < -100) {
+                          data.directionY = data.directionY * -1;
+                      }
+                  }
+              },
+              {
+                  id: "LegObenSmall",
+                  src: "LegObenSmall.png",
+                  directionY: 1,
+                  offsetY: 40,
+                  offsetX: 20,
+                  speedY: 40,
+                  counterY: 0,
+                  zIndex: 200,
+                  moveEvent: function (event, data) {
 
-                                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
-                                      data.counterY += data.speedY * data.directionY;
+                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
+                      data.counterY += data.speedY * data.directionY;
 
-                                      if (data.counterY > 100) {
-                                          data.directionY = data.directionY * -1;
-                                      } else if (data.counterY < -100) {
-                                          data.directionY = data.directionY * -1;
-                                      }
-                                  }
-                              },
-                              {
-                                  name: "LegObenSmall",
-                                  src: "LegFront1Small.png",
-                                  directionY: 1,
-                                  offsetY: 60,
-                                  offsetX: 40,
-                                  speedY: 200,
-                                  counterY: -200,
-                                  zIndex: 0,
-                                  moveEvent: function (event, data) {
+                      if (data.counterY > 100) {
+                          data.directionY = data.directionY * -1;
+                      } else if (data.counterY < -100) {
+                          data.directionY = data.directionY * -1;
+                      }
+                  }
+              },
+              {
+                  id: "LegFront1Small",
+                  src: "LegFront1Small.png",
+                  directionY: 1,
+                  offsetY: 60,
+                  offsetX: 40,
+                  speedY: 200,
+                  counterY: -200,
+                  zIndex: 0,
+                  moveEvent: function (event, data) {
 
-                                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
-                                      data.counterY += data.speedY * data.directionY;
+                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
+                      data.counterY += data.speedY * data.directionY;
 
-                                      if (data.counterY > 600) {
-                                          data.directionY = data.directionY * -1;
-                                      } else if (data.counterY < -600) {
-                                          data.directionY = data.directionY * -1;
-                                      }
-                                  }
-                              },
-                              {
-                                  name: "LegObenSmall",
-                                  src: "LegFront1Small.png",
-                                  directionY: 1,
-                                  offsetY: 60,
-                                  offsetX: -20,
-                                  speedY: 200,
-                                  counterY: 100,
-                                  zIndex: 0,
-                                  moveEvent: function (event, data) {
+                      if (data.counterY > 600) {
+                          data.directionY = data.directionY * -1;
+                      } else if (data.counterY < -600) {
+                          data.directionY = data.directionY * -1;
+                      }
+                  }
+              },
+              {
+                  id: "LegFront1Small",
+                  src: "LegFront1Small.png",
+                  directionY: 1,
+                  offsetY: 60,
+                  offsetX: -20,
+                  speedY: 200,
+                  counterY: 100,
+                  zIndex: 0,
+                  moveEvent: function (event, data) {
 
-                                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
-                                      data.counterY += data.speedY * data.directionY;
+                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
+                      data.counterY += data.speedY * data.directionY;
 
-                                      if (data.counterY > 600) {
-                                          data.directionY = data.directionY * -1;
-                                      } else if (data.counterY < -600) {
-                                          data.directionY = data.directionY * -1;
-                                      }
-                                  }
-                              },
-                              {
-                                  name: "LegObenSmall",
-                                  src: "LegFront1Small.png",
-                                  directionY: 1,
-                                  offsetY: 60,
-                                  offsetX: -80,
-                                  speedY: 200,
-                                  counterY: 200,
-                                  zIndex: 0,
-                                  moveEvent: function (event, data) {
+                      if (data.counterY > 600) {
+                          data.directionY = data.directionY * -1;
+                      } else if (data.counterY < -600) {
+                          data.directionY = data.directionY * -1;
+                      }
+                  }
+              },
+              {
+                  id: "LegFront1Small",
+                  src: "LegFront1Small.png",
+                  directionY: 1,
+                  offsetY: 60,
+                  offsetX: -80,
+                  speedY: 200,
+                  counterY: 200,
+                  zIndex: 0,
+                  moveEvent: function (event, data) {
 
-                                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
-                                      data.counterY += data.speedY * data.directionY;
+                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
+                      data.counterY += data.speedY * data.directionY;
 
-                                      if (data.counterY > 600) {
-                                          data.directionY = data.directionY * -1;
-                                      } else if (data.counterY < -600) {
-                                          data.directionY = data.directionY * -1;
-                                      }
-                                  }
-                              },
-                               {
-                                   name: "LegObenSmall",
-                                   src: "LegVHUSmall.png",
-                                   directionY: 1,
-                                   centerY: 20,
-                                   offsetY: 40,
-                                   offsetX: -110,
-                                   speedY: 150,
-                                   counterY: -400,
-                                   zIndex: 300,
-                                   moveEvent: function (event, data) {
+                      if (data.counterY > 600) {
+                          data.directionY = data.directionY * -1;
+                      } else if (data.counterY < -600) {
+                          data.directionY = data.directionY * -1;
+                      }
+                  }
+              },
+              {
+                  id: "LegVHUSmall",
+                  src: "LegVHUSmall.png",
+                  directionY: 1,
+                  centerY: 20,
+                  offsetY: 40,
+                  offsetX: -110,
+                  speedY: 150,
+                  counterY: -400,
+                  zIndex: 300,
+                  moveEvent: function (event, data) {
 
-                                       data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
-                                       data.counterY += data.speedY * data.directionY;
+                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
+                      data.counterY += data.speedY * data.directionY;
 
-                                       if (data.counterY > 600) {
-                                           data.directionY = data.directionY * -1;
-                                       } else if (data.counterY < -600) {
-                                           data.directionY = data.directionY * -1;
-                                       }
-                                   }
-                               }, {
-                                   name: "LegObenSmall",
-                                   src: "LegVHUSmall.png",
-                                   directionY: 1,
-                                   centerY: 20,
-                                   offsetY: 40,
-                                   offsetX: -50,
-                                   speedY: 200,
-                                   counterY:400,
-                                   zIndex: 300,
-                                   moveEvent: function (event, data) {
+                      if (data.counterY > 600) {
+                          data.directionY = data.directionY * -1;
+                      } else if (data.counterY < -600) {
+                          data.directionY = data.directionY * -1;
+                      }
+                  }
+              }, {
+                  id: "LegVHUSmall",
+                  src: "LegVHUSmall.png",
+                  directionY: 1,
+                  centerY: 20,
+                  offsetY: 40,
+                  offsetX: -50,
+                  speedY: 200,
+                  counterY: 400,
+                  zIndex: 300,
+                  moveEvent: function (event, data) {
 
-                                       data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
-                                       data.counterY += data.speedY * data.directionY;
+                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
+                      data.counterY += data.speedY * data.directionY;
 
-                                       if (data.counterY > 600) {
-                                           data.directionY = data.directionY * -1;
-                                       } else if (data.counterY < -600) {
-                                           data.directionY = data.directionY * -1;
-                                       }
-                                   }
-                               }, {
-                                   name: "LegObenSmall",
-                                   src: "LegVHUSmall.png",
-                                   directionY: 1,
-                                   centerY: 20,
-                                   offsetY: 40,
-                                   offsetX: 10,
-                                   speedY: 200,
-                                   counterY: 100,
-                                   zIndex: 300,
-                                   moveEvent: function (event, data) {
+                      if (data.counterY > 600) {
+                          data.directionY = data.directionY * -1;
+                      } else if (data.counterY < -600) {
+                          data.directionY = data.directionY * -1;
+                      }
+                  }
+              }, {
+                  id: "LegVHUSmall",
+                  src: "LegVHUSmall.png",
+                  directionY: 1,
+                  centerY: 20,
+                  offsetY: 40,
+                  offsetX: 10,
+                  speedY: 200,
+                  counterY: 100,
+                  zIndex: 300,
+                  moveEvent: function (event, data) {
 
-                                       data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
-                                       data.counterY += data.speedY * data.directionY;
+                      data.image.rotation += event.delta / 1000 * data.speedY * data.directionY;
+                      data.counterY += data.speedY * data.directionY;
 
-                                       if (data.counterY > 600) {
-                                           data.directionY = data.directionY * -1;
-                                       } else if (data.counterY < -600) {
-                                           data.directionY = data.directionY * -1;
-                                       }
-                                   }
-                               }
+                      if (data.counterY > 600) {
+                          data.directionY = data.directionY * -1;
+                      } else if (data.counterY < -600) {
+                          data.directionY = data.directionY * -1;
+                      }
+                  }
+              },
+               {
+                   id: "GrasHintergrund",
+                   src: "gras_gras-01.png"
+               },
+               {
+                    id: "GrasUnten",
+                    src: "gras_02-02.png"
+               }
             ];
 
-            for (var i = 0; i < imagesToLoad.length; ++i) {
-                var imageToLoad = new Image();
-                imageToLoad.src = imagesToLoad[i].src;
-                imageToLoad.onload = handleImageLoad;
-                imagesToLoad[i].image = imageToLoad;
-            }
-
-            createjs.Ticker.setFPS(30);
-            createjs.Ticker.on("tick", function (event) {
-
-                if (imagesLoaded == imagesToLoad.length) {
-                    for (var i = 0; i < imagesToLoad.length; ++i) {
-                        if (imagesToLoad[i].moveEvent) {
-                            imagesToLoad[i].moveEvent(event, imagesToLoad[i]);
-                        }
-                    }
-
-                    kaefersBody.x += event.delta / 1000 * 70;
-                    if (kaefersBody.x > stage.canvas.width) { kaefersBody.x = -100; }
-                }
-                stage.update(event);
-            });
+            loader = new createjs.LoadQueue(false);
+            loader.addEventListener("complete", initializeAllImages);
+            loader.loadManifest(manifest);
         }
 
-        function handleImageLoad(evnt) {
-            imagesLoaded++;
-            if (imagesLoaded == imagesToLoad.length) {
-                initializeAllImages();
-            }
-
-        };
-
         function initializeAllImages() {
+		    hideDistractor();
+            stage = new createjs.Stage("demoCanvas");
             kaefersBody = stage.addChild(new createjs.Container());
-            kaefersBody.x = kaefersBody.y = 400;
+            kaefersBody.x = kaefersBody.y = 340;
 
-            imagesToLoad.sort(function (a, b) {
+            var grassBackgroundImage = loader.getResult("GrasHintergrund");
+            grassBackground = new createjs.Shape();
+            grassBackground.graphics.beginBitmapFill(grassBackgroundImage).drawRect(0, 0, stage.canvas.width + grassBackgroundImage.width, grassBackgroundImage.height);
+            grassBackground.x = 0;
+            grassBackground.y = 100;
+            grassBackground.alpha = 0.5;
+            stage.addChild(grassBackground);
+
+            // initialize the ground
+            var groundImg = loader.getResult("GrasUnten");
+            groundBottom = new createjs.Shape();
+            groundBottom.graphics.beginBitmapFill(groundImg).drawRect(0, 0, stage.canvas.width + groundImg.width, groundImg.height);
+            groundBottom.tileW = groundImg.width;
+            groundBottom.y = stage.canvas.height - groundImg.height;
+            stage.addChild(groundBottom);
+
+            manifest.sort(function (a, b) {
                 return a.zIndex - b.zIndex;
             });
 
-            for (var i = 0; i < imagesToLoad.length; ++i) {
-                var bmp = new createjs.Bitmap(imagesToLoad[i].image);
+            for (var i = 0; i < manifest.length; ++i) {
+                var bmp = new createjs.Bitmap(loader.getResult(manifest[i].id));
                 bmp.scaleX = 1;
                 bmp.scaleY = 1;
-                kaefersBody.addChild(bmp);
-                bmp.regX = imagesToLoad[i].centerX != null ? imagesToLoad[i].centerX : bmp.image.width / 2;
-                bmp.regY = imagesToLoad[i].centerY != null ? imagesToLoad[i].centerY : bmp.image.height / 2;
-                bmp.y += imagesToLoad[i].offsetY ? imagesToLoad[i].offsetY : 0;
-                bmp.x += imagesToLoad[i].offsetX ? imagesToLoad[i].offsetX : 0;
-                bmp.rotation = imagesToLoad[i].rotation ? imagesToLoad[i].rotation : bmp.rotation;
-                imagesToLoad[i].image = bmp;
+
+                if (manifest[i].moveEvent)
+                    kaefersBody.addChild(bmp);
+
+                bmp.regX = manifest[i].centerX != null ? manifest[i].centerX : bmp.image.width / 2;
+                bmp.regY = manifest[i].centerY != null ? manifest[i].centerY : bmp.image.height / 2;
+                bmp.y += manifest[i].offsetY ? manifest[i].offsetY : 0;
+                bmp.x += manifest[i].offsetX ? manifest[i].offsetX : 0;
+                bmp.rotation = manifest[i].rotation ? manifest[i].rotation : bmp.rotation;
+                manifest[i].image = bmp;
             }
 
+            // arm container that holds the blue bar, and the nested green bar:
+            //arm1 = new createjs.Container();
+            //arm1.addChild(redBar);
+            //arm1.addChild(arm2);
+            //arm1.regX = 100;
+
             stage.addChild(kaefersBody);
+
+            createjs.Ticker.setFPS(60);
+            createjs.Ticker.on("tick", function (event) {
+                for (var i = 0; i < manifest.length; ++i) {
+                    if (manifest[i].moveEvent) {
+                        manifest[i].moveEvent(event, manifest[i]);
+                    }
+                }
+
+                var deltaS = event.delta / 1000;
+                groundBottom.x = (groundBottom.x - deltaS * 150) % groundBottom.tileW;
+
+                grassBackground.x = (grassBackground.x - deltaS * 30) % groundBottom.tileW;
+
+                kaefersBody.x += event.delta / 1000 * 70;
+                if (kaefersBody.x > stage.canvas.width) { kaefersBody.x = -100; }
+
+                stage.update(event);
+            });
         }
 
     </script>
 </head>
 <body onload="init();">
+<div>
     <canvas id="demoCanvas" height="500" width="500" style="background-color: yellow;"></canvas>
-</body>
+</div>
+	</body>
 
 </html>
